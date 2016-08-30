@@ -25,9 +25,6 @@ df$hacker_timezone = NULL
 df$hacker_created_at = NULL
 df$last_online = NULL
 
-library(caTools)
-library(party)
-
 train = subset(df, df$train == 1)
 test = subset(df, df$train == 0)
 
@@ -35,6 +32,7 @@ train$train = NULL
 test$train = NULL
 test$opened = NULL
 
+install.packages("h2o")
 library(h2o)
 h2o.init(nthreads = -1)
 
@@ -47,8 +45,7 @@ test.hex <- h2o.uploadFile('./transformed_test.csv.gz', destination_frame='hr_te
 feature.names = names(train)
 feature.names <- feature.names[! feature.names %in% c('user_id', 'mail_id', 'opened', 'clicked', 'unsubscribed')]
 
-rf = h2o.randomForest(x = feature.names, y = 'opened', training_frame = train.hex, ntrees = 2)
-
+rf = h2o.randomForest(x = feature.names, y = 'opened', training_frame = train.hex, ntrees = 50, max_depth = 20, nfolds = 10)
 preds = h2o.predict(rf, test.hex)
 
 write.table(as.vector(as.numeric(preds)), './h2o_rf_2.csv',quote=F,sep=',',row.names=F)
