@@ -114,17 +114,19 @@ train.hex <- h2o.uploadFile('./transformed_train.csv.gz', destination_frame='hr_
 test.hex <- h2o.uploadFile('./transformed_test.csv.gz', destination_frame='hr_test')
 
 feature.names = names(train)
-feature.names <- feature.names[! feature.names %in% c('user_id', 'mail_id', 'opened', 'clicked', 'unsubscribed')]
+feature.names <- feature.names[! feature.names %in% c('user_id', 'opened', 'clicked', 'unsubscribed')]
 
-rf = h2o.randomForest(x = feature.names, y = 'opened', training_frame = train.hex, ntrees = 50, max_depth = 20, nfolds = 10)
+#rf = h2o.randomForest(x = feature.names, y = 'opened', training_frame = train.hex, ntrees = 50, max_depth = 20, nfolds = 10)
 #rf = h2o.randomForest(x = feature.names, y = 'opened', training_frame = train.hex, ntrees = 50, max_depth = 20)
-preds = as.data.frame(h2o.predict(rf, test.hex))
-
-write.table(as.vector(as.numeric(preds$predict) - 1), './h2o_rf_5.csv',quote=F,sep=',',row.names=F, col.names = F)
+#preds = as.data.frame(h2o.predict(rf, test.hex))
+                    
+#write.table(as.vector(as.numeric(preds$predict) - 1), './h2o_rf_5.csv',quote=F,sep=',',row.names=F, col.names = F)
 
 #Trying neural nets and ensemble with RF -- lower than RF
-#nnet = h2o.deeplearning(x = feature.names, y = "opened", training_frame = train.hex)
-#preds_dl = as.data.frame(h2o.predict(nnet, test.hex))
+nnet = h2o.deeplearning(x = feature.names, y = "opened", training_frame = train.hex)
+preds_dl = as.data.frame(h2o.predict(nnet, test.hex))
+
+write.table(as.vector(as.numeric(preds_dl$predict) - 1), './h2o_rf_6.csv',quote=F,sep=',',row.names=F, col.names = F)
 
 #preds_ens = bitwAnd(as.vector(as.numeric(preds$predict) - 1), as.vector(as.numeric(preds_dl$predict) - 1))
 #write.table(as.vector(as.numeric(preds_dl$predict) - 1), './h2o_rf_5.csv',quote=F,sep=',',row.names=F, col.names = F)
