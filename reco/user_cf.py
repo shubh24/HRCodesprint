@@ -22,4 +22,25 @@ for i in cf_reader:
 for i in cf_arr:
     loc = cf_arr[i]
     val = ("").join(loc)
-    print len(inv_cf_arr[val])
+    similar_hackers = inv_cf_arr[val]
+
+    selected_chals = {}
+
+    for similar_hacker in similar_hackers:
+        
+        chals = hacker_hash[similar_hacker]
+        my_chals = hacker_hash[i]
+
+        for c in chals:
+            if c in my_chals or c not in yo_arr:
+                continue
+
+            else:
+                if c not in selected_chals:
+                    selected_chals[c] = 1
+                else:
+                    selected_chals[c] += 1
+
+    selected_chals = sorted(selected_chals, key = lambda x: selected_chals[x], reverse = True)
+
+    
