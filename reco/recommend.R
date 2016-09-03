@@ -1,6 +1,10 @@
 chal = read.csv("challenges.csv", stringsAsFactors = TRUE)
 sub = read.csv("submissions.csv", stringsAsFactors = TRUE)
 
+cf_vec = unique(with(sub, data.frame(hacker_id, model.matrix(~contest_id+language-1, sub))))
+cf_vec = aggregate(.~hacker_id, cf_vec, FUN = max)
+write.table(cf_vec, "cf_vec.csv", sep = ",", row.names = F, col.names = FALSE)
+
 sub$created_at = NULL
 sub$language = NULL
 agg_sub = aggregate(solved ~ hacker_id + challenge_id + contest_id, data = sub, FUN = max)
@@ -65,3 +69,5 @@ yo$contest_id = NULL
 
 write.table(yo, "yo.csv", sep = ",", row.names = F, col.names = FALSE)
 write.table(df, "df.csv", sep = ",", row.names = F, col.names = FALSE)
+
+
