@@ -41,10 +41,10 @@ for i in yo_reader:
     if chal not in yo_arr:
         yo_arr[chal] = []
 
-        for j in range(1, 114):
+        for j in range(1, 137):
             yo_arr[chal].append(i[j])
     else:
-        for j in range(1, 114):
+        for j in range(1, 137):
             yo_arr[chal][j-1] = str(int(yo_arr[chal][j-1])|int(i[j]))
 
 import pickle
@@ -58,5 +58,5 @@ for chal1 in yo_arr:
         if cos_val > 0:
             cos_dict[chal1][chal2] = cos_val
 
-with open('cos_dict2.pickle', 'wb') as handle:
+with open('cos_dict.pickle', 'wb') as handle:
     pickle.dump(cos_dict, handle)
