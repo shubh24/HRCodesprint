@@ -107,7 +107,7 @@ for hacker in hacker_hash:
         if sc not in final:
             final.append(sc)
 
-        if len(final) == 4:
+        if len(final) == 5:
             break
 
     if len(final) < 11:
